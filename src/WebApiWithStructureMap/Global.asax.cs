@@ -1,6 +1,6 @@
 ﻿using StructureMap;
 using System.Web.Http;
-using WebApiExample.DependencyResolution;
+using WebApiExample.Infrastructure.DependencyResolution;
 
 namespace WebApiWithStructureMap
 {
