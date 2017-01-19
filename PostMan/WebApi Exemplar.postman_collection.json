@@ -67,6 +67,31 @@
 			"response": []
 		},
 		{
+			"name": "POST - MyObjectDto Invalid",
+			"request": {
+				"url": "http://localhost:7508/api/test",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"Name\": \"\",\n  \"Description\": \"Description for a new request.\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
 			"name": "PUT - MyObjectDto",
 			"request": {
 				"url": "http://localhost:7508/api/test/3",
