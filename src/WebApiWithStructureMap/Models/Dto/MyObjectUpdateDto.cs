@@ -1,5 +1,9 @@
-﻿namespace WebApiWithStructureMap.Models.Dto
+﻿using FluentValidation.Attributes;
+using WebApiWithStructureMap.Infrastructure.Validation;
+
+namespace WebApiWithStructureMap.Models.Dto
 {
+    [Validator(typeof(MyObjectUpdateDtoValidation))]
     public class MyObjectUpdateDto
     {
         public int Id { get; set; }

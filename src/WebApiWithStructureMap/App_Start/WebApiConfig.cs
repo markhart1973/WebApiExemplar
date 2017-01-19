@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using FluentValidation.WebApi;
+using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using WebApiWithStructureMap.Infrastructure.Exceptions;
 
@@ -22,6 +23,8 @@ namespace WebApiWithStructureMap
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            FluentValidationModelValidatorProvider.Configure(config);
         }
     }
 }

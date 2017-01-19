@@ -47,6 +47,14 @@
       <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentValidation, Version=6.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.6.4.0-beta9\lib\Net45\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentValidation.WebApi, Version=6.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.WebApi.6.4.0-beta9\lib\Net45\FluentValidation.WebApi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Marvin.JsonPatch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Marvin.JsonPatch.1.0.0\lib\portable40-net40+win8+wpa81\Marvin.JsonPatch.dll</HintPath>
       <Private>True</Private>
@@ -111,6 +119,8 @@
     <Compile Include="Infrastructure\Exceptions\GlobalExceptionHandler.cs" />
     <Compile Include="Infrastructure\Mapper\MapperRegistry.cs" />
     <Compile Include="Infrastructure\Services\ServicesRegistry.cs" />
+    <Compile Include="Infrastructure\Validation\MyObjectUpdateDtoValidation.cs" />
+    <Compile Include="Infrastructure\Validation\MyObjectInsertDtoValidation.cs" />
     <Compile Include="Models\Core\MyObject.cs" />
     <Compile Include="Models\Dto\MyObjectInsertDto.cs" />
     <Compile Include="Models\Dto\MyObjectUpdateDto.cs" />
