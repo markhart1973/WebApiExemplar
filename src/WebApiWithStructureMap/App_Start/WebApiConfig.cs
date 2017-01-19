@@ -1,4 +1,6 @@
 ﻿using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
+using WebApiWithStructureMap.Infrastructure.Exceptions;
 
 namespace WebApiWithStructureMap
 {
@@ -11,6 +13,9 @@ namespace WebApiWithStructureMap
  
             // Web API routes
             config.MapHttpAttributeRoutes();
+
+            config.Services.Replace(typeof(IExceptionHandler),
+                new GlobalExceptionHandler());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

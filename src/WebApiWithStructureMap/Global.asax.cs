@@ -1,4 +1,5 @@
 ﻿using StructureMap;
+using System.Diagnostics;
 using System.Web.Http;
 using WebApiExample.Infrastructure.DependencyResolution;
 
@@ -17,7 +18,7 @@ namespace WebApiWithStructureMap
                 //Register Dependencies
                 x.Scan(y =>
                 {
-                    y.TheCallingAssembly();
+                    y.AssemblyContainingType<WebApiApplication>();
                     y.LookForRegistries();
                 });
                 //Optionally Register IControllerActivator

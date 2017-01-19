@@ -7,7 +7,7 @@ namespace WebApiWithStructureMap.Services
     {
         public ServicesRegistry()
         {
-            For<IMyData>().Use<MyData>().ContainerScoped();
+            For<IMyData>().Use<MyData>().Singleton();
         }
     }
 }

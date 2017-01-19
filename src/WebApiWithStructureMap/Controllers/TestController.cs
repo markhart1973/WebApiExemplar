@@ -1,43 +1,144 @@
-﻿using System.Web.Http;
+﻿using AutoMapper;
+using Marvin.JsonPatch;
+using System.Collections.Generic;
+using System.Net;
+using System.Web.Http;
 using WebApiWithStructureMap.Services;
+using Core = WebApiWithStructureMap.Models.Core;
+using Dto = WebApiWithStructureMap.Models.Dto;
 
 namespace WebApiWithStructureMap.Controllers
 {
-    [Route("api/test")]
+    [RoutePrefix("api/test")]
     public class TestController : ApiController
     {
-        private readonly IMyData _myData;
+        private const string GetMyObject = "GetMyObject";
 
-        public TestController(IMyData myData)
+        private readonly IMyData _myData;
+        private readonly IMapper _mapper;
+
+        public TestController(IMyData myData,
+            IMapper mapper)
         {
             _myData = myData;
+            _mapper = mapper;
         }
 
         [HttpGet]
+        [Route("")]
         public IHttpActionResult Get()
         {
-            return Ok(_myData.GetAll());
+            var result = _mapper.Map<List<Dto.MyObjectDto>>(_myData.GetAll());
+            return Ok(result);
         }
 
-        // GET: api/Test/5
-        public string Get(int id)
+        [HttpGet]
+        [Route("{id}", Name = GetMyObject)]
+        public IHttpActionResult Get(int id)
         {
-            return "value";
+            var result = _myData.Get(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<Dto.MyObjectDto>(result));
         }
 
-        // POST: api/Test
-        public void Post([FromBody]string value)
+        [HttpPost]
+        [Route("")]
+        public IHttpActionResult Post([FromBody]Dto.MyObjectInsertDto myObject)
         {
+            if (myObject == null)
+            {
+                return BadRequest("The supplied MyObject should not be null.");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return BadRequest(this.ModelState);
+            }
+
+            var addedMyObject = _myData.Add(_mapper.Map<Core.MyObject>(myObject));
+
+            return CreatedAtRoute(GetMyObject,
+                new { id = addedMyObject.Id },
+                _mapper.Map<Dto.MyObjectDto>(addedMyObject));
         }
 
-        // PUT: api/Test/5
-        public void Put(int id, [FromBody]string value)
+        [HttpPut]
+        [Route("{id}")]
+        public IHttpActionResult Put(int id, [FromBody]Dto.MyObjectUpdateDto myObject)
         {
+            if (myObject == null)
+            {
+                return BadRequest("The supplied MyObject should not be null.");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return BadRequest(this.ModelState);
+            }
+
+            var existingMyObject = _myData.Get(id);
+
+            if (existingMyObject == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(myObject, existingMyObject);
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // DELETE: api/Test/5
-        public void Delete(int id)
+        [HttpPatch]
+        [Route("{id}")]
+        public IHttpActionResult Patch(int id,
+            [FromBody]JsonPatchDocument<Dto.MyObjectUpdateDto> myObjectPatch)
         {
+            if (myObjectPatch == null)
+            {
+                return BadRequest("The supplied MyObject patch document should not be null.");
+            }
+
+            var existingMyObject = _myData.Get(id);
+
+            if (existingMyObject == null)
+            {
+                return NotFound();
+            }
+
+            var existingMyObjectUpdateDto = _mapper.Map<Dto.MyObjectUpdateDto>(existingMyObject);
+            myObjectPatch.ApplyTo(existingMyObjectUpdateDto);
+
+            this.Validate(existingMyObjectUpdateDto);
+
+            if (!this.ModelState.IsValid)
+            {
+                return BadRequest(this.ModelState);
+            }
+
+            _mapper.Map(existingMyObjectUpdateDto, existingMyObject);
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IHttpActionResult Delete(int id)
+        {
+            var existingMyObject = _myData.Get(id);
+
+            if (existingMyObject == null)
+            {
+                return NotFound();
+            }
+
+            _myData.Delete(id);
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
     }
 }
